@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  postgres:
+      image: postgres:15
+      container_name: postgres
+      environment:
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      ports:
+        - "5433:5432"
+      volumes:
+        - pgdata:/var/lib/postgresql/data
+      networks:
+        - demo-net
+
+  demo-api:
+    build: .
+    container_name: demo-api
+    ports:
+      - "8081:8081"
+    networks:
+      - demo-net
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_RABBITMQ_HOST: rabbitmq   # Nome do serviço/container do RabbitMQ
+      SPRING_RABBITMQ_PORT: 5672       # Porta de comunicação interna AMQP
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"    # Comunicação AMQP
+      - "15672:15672"  # Painel Web
+    networks:
+      - demo-net
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+networks:
+  demo-net:
+    driver: bridge
+
+volumes:
+  pgdata:
