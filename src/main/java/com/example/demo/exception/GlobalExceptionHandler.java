@@ -10,7 +10,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.example.demo.controller")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpServerErrorException.class)

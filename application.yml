@@ -9,3 +9,20 @@ resilience4j:
         waitDurationInOpenState: 10s
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
+
+server:
+  port: 8081
+
+#management:
+#  endpoints:
+#    web:
+#      base-path: /actuator
+#      exposure:
+#        include: "*"
+#  endpoint:
+#    health:
+#      show-details: always
+#  prometheus:
+#    metrics:
+#      export:
+#        enabled: true

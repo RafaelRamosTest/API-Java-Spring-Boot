@@ -1,16 +1,21 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.CustomerRequest;
+import com.example.demo.listener.CustomerConsumer;
 import com.example.demo.mapper.CustomerMapper;
 import com.example.demo.model.Customer;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.config.RabbitMQConfig;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -19,11 +24,18 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class CustomerServiceTest {
-
+    @Mock
     private CustomerRepository repository;
+    @Mock
     private RabbitTemplate rabbitTemplate;
+    @InjectMocks
     private CustomerService service;
+    @Mock
     private CustomerMapper mapper;
+    @Mock
+    private RestTemplate restTemplate;
+    @Mock
+    private CustomerConsumer consumer;
 
     @BeforeEach
     void setup() {
@@ -132,4 +144,6 @@ class CustomerServiceTest {
             service.getByCpf("123"); // CPF com menos de 11 dígitos
         });
     }
+
+
 }
